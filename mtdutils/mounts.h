@@ -14,24 +14,28 @@
  * limitations under the License.
  */
 
-#ifndef RECOVERY_INSTALL_H_
-#define RECOVERY_INSTALL_H_
-
-#include "common.h"
+#ifndef MTDUTILS_MOUNTS_H_
+#define MTDUTILS_MOUNTS_H_
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-enum { INSTALL_SUCCESS, INSTALL_ERROR, INSTALL_CORRUPT, INSTALL_NONE };
-// Install the package specified by root_path.  If INSTALL_SUCCESS is
-// returned and *wipe_cache is true on exit, caller should wipe the
-// cache partition.
-int install_package(const char *root_path, int* wipe_cache,
-                    const char* install_file);
+typedef struct MountedVolume MountedVolume;
+
+int scan_mounted_volumes(void);
+
+const MountedVolume *find_mounted_volume_by_device(const char *device);
+
+const MountedVolume *
+find_mounted_volume_by_mount_point(const char *mount_point);
+
+int unmount_mounted_volume(const MountedVolume *volume);
+
+int remount_read_only(const MountedVolume* volume);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif  // RECOVERY_INSTALL_H_
+#endif  // MTDUTILS_MOUNTS_H_
